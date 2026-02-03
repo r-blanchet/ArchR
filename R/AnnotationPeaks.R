@@ -423,7 +423,16 @@ addMotifAnnotations <- function(
 
   .logDiffTime(paste0("Getting Motif Set, Species : ", species), t1 = tstart, verbose = TRUE, logFile = logFile)
 
-  if(tolower(motifSet)=="jaspar2020"){
+  if(tolower(motifSet)=="jaspar2024"){
+    
+    .requirePackage("JASPAR2024",installInfo='BiocManager::install("JASPAR2024")')
+    args <- list(species = species, collection = collection, ...)
+    motifs <- TFBSTools::getMatrixSet(JASPAR2024::JASPAR2024, args)
+    obj <- .summarizeJASPARMotifs(motifs)
+    motifs <- obj$motifs
+    motifSummary <- obj$motifSummary
+
+  }else if(tolower(motifSet)=="jaspar2020"){
     
     .requirePackage("JASPAR2020",installInfo='BiocManager::install("JASPAR2020")')
     args <- list(species = species, collection = collection, ...)
@@ -443,7 +452,7 @@ addMotifAnnotations <- function(
 
   }else if(tolower(motifSet)=="jaspar2016"){
 
-    .requirePackage("JASPAR2016",installInfo='BiocManager::install("JASPAR2018")')
+    .requirePackage("JASPAR2016",installInfo='BiocManager::install("JASPAR2016")')
     args <- list(species = species, collection = collection, ...)
     motifs <- TFBSTools::getMatrixSet(JASPAR2016::JASPAR2016, args)
     obj <- .summarizeJASPARMotifs(motifs)
